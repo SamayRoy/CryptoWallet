@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { TransactionContext} from '../context/TransactionContext.jsx';
 import {
   Container,
   Typography,
@@ -20,12 +21,16 @@ const availableTokens = [
 ];
 
 function TokenTransfer() {
-  const [recipient, setRecipient] = useState("");
-  const [amount, setAmount] = useState("");
-  const [selectedToken, setSelectedToken] = useState("");
+  const {connectWallet, connectedAccount, formData, setFormData,sendTransaction, handleChange} = useContext(TransactionContext);
+  // cont [selectedToken, setSelectedToken] = useState("");
 
-  const handleTransfer = () => {
-    console.log(`Transferring ${amount} ${selectedToken} to ${recipient}`);
+    
+  const handleTransfer = (e) => {
+    const {addressTo, amount, message} = formData;
+    e.preventDefault(); //preventing reload
+
+    if(!addressTo || !amount || !message) return;
+    sendTransaction();
   };
 
   return (
@@ -38,8 +43,9 @@ function TokenTransfer() {
           <TextField
             fullWidth
             label="Recipient Address"
-            value={recipient}
-            onChange={(e) => setRecipient(e.target.value)}
+            name="addressTo"
+            value={formData.addressTo || ''}
+            onChange={handleChange}
             variant="outlined"
           />
         </Grid>
@@ -48,12 +54,24 @@ function TokenTransfer() {
             fullWidth
             label="Amount"
             type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            name="amount"
+            value={formData.amount || ''}
+            onChange={handleChange}
             variant="outlined"
           />
         </Grid>
         <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Message"
+            name="message"  
+            type="text"
+            value={formData.message || ''}
+            onChange={handleChange}
+            variant="outlined"
+          />
+        </Grid>
+        {/* <Grid item xs={12}>
           <FormControl fullWidth variant="outlined">
             <InputLabel id="token-select-label">Token</InputLabel>
             <Select
@@ -69,7 +87,7 @@ function TokenTransfer() {
               ))}
             </Select>
           </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <Button variant="contained" color="primary" onClick={handleTransfer}>
             Transfer

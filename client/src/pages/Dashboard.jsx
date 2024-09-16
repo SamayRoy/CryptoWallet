@@ -50,7 +50,7 @@ function Dashboard() {
   const [portfolioValue, setPortfolioValue] = useState(null);
   const [historicalData, setHistoricalData] = useState(null);
 
-  const {connectWallet} = useContext(TransactionContext);
+  const {connectWallet, connectedAccount, formData,setFormData, sendTransaction, handleChange} = useContext(TransactionContext);
 
   useEffect(() => {
     // Simulate API call with setTimeout
@@ -117,9 +117,9 @@ function Dashboard() {
         </Grid>
       </Grid>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 4 }}>
-        <TabletButton variant="contained" onClick={connectWallet}>
+        {1 && (<TabletButton variant="contained" onClick={connectWallet}>
           Connect Wallet
-        </TabletButton>
+        </TabletButton>)}
       </Box>
     </Container>
   );
