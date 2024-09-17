@@ -35,7 +35,9 @@ const getEthereumContract = async () => {
 
 export const TransactionProvider = ({ children }) => {
     const [connectedAccount, setConnectedAccount] = useState("");
-    const [formData, setFormData] = useState({addressTo: '', amount: '', message: ''});
+    const [formData, setFormData] = useState({addressTo: '', amount: '', message: '', keyword: ''});
+    const [isLoading, setIsLoading] = useState(false);
+    const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount') || 0);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -73,23 +75,27 @@ export const TransactionProvider = ({ children }) => {
                 console.log("Make sure you have metamask!");
                 return;
             }
-            const {addressTo, amount, message} = formData;
+            const {addressTo, amount, message, keyword} = formData;
             const transactionContract = await getEthereumContract();
-            // await ethereum.request({
-            //     method: 'eth_sendTransaction',
-            //     params: [
-            //         {
-            //             from: connectedAccount,
-            //             to: addressTo,
-            //             gas: "0x4200",
-            //             value: ethers.utils.parseEther(amount)._hex,
-            //             data: ethers.utils.formatBytes32String(message)
-            //         }
-            //     ] 
-            // })
-            // transactionContract.addTransaction(transaction);
-            // await transactionResponse.wait();
-            // console.log("Transaction sent");
+            await ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [
+                    {
+                        from: connectedAccount,
+                        to: addressTo,
+                        gasLimit: "0x4200",
+                        value: ethers.utils.parseEther(amount)._hex
+                    }
+                ] 
+            }); 
+            const transactionHash = await transactionContract.addToBlockchain(addressTo,amount,message, keyword);
+            setIsLoading(true);
+            console.log("Loading - ${transactionHash.hash}");
+            await transactionHash.wait();
+            setIsLoading(true);
+            console.log("Success - ${transactionHash.hash}");
+            const transactionCount = await transactionContract.getTransactionCount();
+            setTransactionCount(transactionCount.toNumber());
         } catch (error) {
             console.log(error);
             throw new Error("Error sending transaction");
