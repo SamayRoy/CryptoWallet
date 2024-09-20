@@ -1,1 +1,4 @@
 pass.png
+secretphrase.txt
+client/backend/install.py
+client/backend/server/creds.py
