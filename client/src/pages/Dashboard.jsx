@@ -785,7 +785,7 @@ const Sidebar = ({ activeItem, setActiveItem, darkMode, toggleTheme }) => {
         boxShadow: darkMode ? '0 0 20px rgba(0, 0, 0, 0.5)' : '0 0 20px rgba(0, 0, 0, 0.1)',
       }}
     >
-      <Typography variant="h5" sx={{ mt: 1, mb: 1, color: 'text.primary', alignItems: 'center' }}>CryptoNite</Typography>
+      <Typography variant="h5" sx={{ mt: 1, mb: 1, color: 'text.primary', alignItems: 'center' }}>KryptoNite</Typography>
       <List sx={{ flexGrow: 1 }}>
       {['Dashboard', 'Transfer', 'Settings'].map((text) => (
         <ListItemButton

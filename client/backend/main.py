@@ -3,6 +3,9 @@ import creds
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import datetime
+import os 
+
+API_KEY = os.environ.get('API_KEY')  
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -55,7 +58,7 @@ def get_wallet_history():
     }
     try:
         result = evm_api.wallets.get_wallet_history(
-            api_key=creds.api_key,
+            api_key=API_KEY,
             params=params,
         )
         
@@ -96,7 +99,7 @@ def get_current_balance():
         }
         
         result = evm_api.token.get_multiple_token_prices(
-            api_key=creds.api_key,
+            api_key=API_KEY,
             body=body,
             params=params,
         )
@@ -128,7 +131,7 @@ def get_token_prices():
         }
         
         result = evm_api.token.get_multiple_token_prices(
-            api_key=creds.api_key,
+            api_key=API_KEY,
             body=body,
             params=params,
         )
@@ -153,7 +156,7 @@ def get_wallet_net_worth():
 
     try:
         result = evm_api.wallets.get_wallet_net_worth(
-            api_key=creds.api_key,
+            api_key=API_KEY,
             params=params,
         )
         return jsonify(result)
